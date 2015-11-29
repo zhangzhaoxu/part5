@@ -10,27 +10,11 @@
     <script type="text/javascript" src="bower_components/angular-material-data-table/dist/md-data-table.js"></script>
     <script src="index.js"></script>
     <link rel="stylesheet" href="bower_components/angular-material/angular-material.css">
-    <style>
-        .back{
-            background-color: aqua;
-        }
-
-        .thCon {
-            width: 30%;
-            display:block;
-            white-space:nowrap;
-            overflow: hidden;
-        }
-
-        .thCon li{
-            width: 25%;
-            list-style: none;
-            display: inline-block;
-            transition: all 1s ease;
-        }
-    </style>
+    <link rel="stylesheet" href="index.css"/>
 </head>
 <body ng-app="app">
-<my-data-table test="boom"></my-data-table>
+<my-table-slider>
+    <my-data-table test="boom"></my-data-table>
+</my-table-slider>
 </body>
 </html>

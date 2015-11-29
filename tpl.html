@@ -1,12 +1,30 @@
-<ul class="thCon" style="float: left">
-    <li>姓名</li>
-    <li>学号</li>
-</ul>
-<button style="float: left" ng-show="changeShow" ng-click="slideLeft()">left</button>
-<ul class="thCon" style="float: left">
-    <li>第1次考勤</li>
-    <li>第2次考勤</li>
-</ul>
-<button style="float: left" ng-show="changeShow" ng-click="slideRight()">right</button>
-&nbsp;&nbsp;
-<input style="float: left" type="button" value="增加考勤" ng-click="addTest()">
+<md-content class="md-padding grey-back" flex layout="column" layout-align="start center" >
+    <div class="list-container">
+        <!--toolbar-->
+        <div class="list list-header" layout="row" layout-align="start center">
+            <div flex="15">
+                <span>学号</span>
+            </div>
+            <div flex="15">
+                <span>姓名</span>
+            </div>
+            <div flex="15">
+                <input type="button" value="test" ng-click="slideLeft()"/>
+            </div>
+        </div>
+
+        <div class="list" ng-class="{'list-bottom':$last}" ng-repeat="student in vm.todos">
+            <div class="list-item">
+                <div layout="row">
+                    <div flex="15"><span>{{student.studentId}}</span></div>
+                    <div flex="15"><span>{{student.name}}</span></div>
+                    <div flex="70" layout="row">
+                        <div flex="20" ng-repeat="mark in student.attendances">
+                            <span>{{mark}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</md-content>
