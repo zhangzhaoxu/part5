@@ -1,27 +1,22 @@
 <md-content class="md-padding grey-back" flex layout="column" layout-align="start center" >
-    <div class="list-container">
+    <div class="list-container" my-table-slider>
         <!--toolbar-->
         <div class="list list-header" layout="row" layout-align="start center">
             <div flex="15">
-                <span>学号</span>
+                学号
             </div>
             <div flex="15">
-                <span>姓名</span>
-            </div>
-            <div flex="15">
-                <input type="button" value="test" ng-click="slideLeft()"/>
+                姓名
             </div>
         </div>
 
         <div class="list" ng-class="{'list-bottom':$last}" ng-repeat="student in vm.todos">
             <div class="list-item">
                 <div layout="row">
-                    <div flex="15"><span>{{student.studentId}}</span></div>
-                    <div flex="15"><span>{{student.name}}</span></div>
-                    <div flex="70" layout="row">
-                        <div flex="20" ng-repeat="mark in student.attendances">
-                            <span>{{mark}}</span>
-                        </div>
+                    <div flex="15">{{student.studentId}}</div>
+                    <div flex="15">{{student.name}}</div>
+                    <div  flex="70" layout="row" style="transition: all 1s ease">
+                        <span flex="20" ng-repeat="mark in student.attendances">{{mark}}</span>
                     </div>
                 </div>
             </div>

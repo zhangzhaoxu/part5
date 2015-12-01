@@ -3,26 +3,10 @@
 
 angular
     .module('app', ['ngMaterial'])
-    .directive('myTableSlider', function () {
-        function controller($scope,$element){
-            var divCon = $element;
-            console.log(divCon);
-            this.test = function () {
-                alert("boom");
-            }
-        }
-        return{
-            restrict:'EA',
-            transclude: true,
-            template: '<div ng-transclude></div>',
-            controller: controller
-        }
-    })
     .directive('myDataTable', function () {
         return{
             restrict:'EA',
             templateUrl:'tpl.html',
-            require:'^myTableSlider',
             controllerAs:'vm',
             scope:{
                 test:'@'
@@ -31,8 +15,10 @@ angular
                 var vm = this;
 
                 vm.todos = [];
-
                 activate();
+
+                this.L = 10; //每行一共的span个数
+                this.cL = 5; //每行允许同时显示的个数
 
                 ///////////////////
                 function activate () {
@@ -48,57 +34,48 @@ angular
                         }
                     }
                 }
-            },
-            link: function (scope, ele, attr, ctrl) {
-
-                scope.slideLeft = function () {
-                    ctrl.test();
-                }
-
             }
-            //link: function (scope, ele, attrs) {
-            //    var lis = ele.find('ul').eq(1).find('li');
-            //    scope.changeShow = lis.length>3?true:false;
-            //    console.log(lis);
-            //    scope.addTest = function () {
-            //        var lis = ele.find('ul').eq(1).find('li');
-            //        var l = lis.length;
-            //        scope.changeShow  = l>3?true:false;
-            //        lis.eq(l-1).after('<li>第'+(l+1)+'次测试</li>');
-            //    };
-            //
-            //    scope.slideMark = 0;
-            //
-            //    scope.slideLeft = function () {
-            //        var lis = ele.find('ul').eq(1).find('li');
-            //        var l = lis.length;
-            //        scope.slideMark-=100;
-            //        for(var i=0;i<l;i++){
-            //            lis[i].style.transform="translateX("+scope.slideMark+"%)";
-            //        }
-            //    };
-            //
-            //    scope.slideRight = function () {
-            //        var lis = ele.find('ul').eq(1).find('li');
-            //        var l = lis.length;
-            //        scope.slideMark+=100;
-            //        for(var i=0;i<l;i++){
-            //            lis[i].style.transform = "translateX("+scope.slideMark+"%)";
-            //        }
-            //    }
-            //}
         }
     })
+    .directive('myTableSlider', function () {
+        return{
+            restrict:'AE',
+            require:'^?myDataTable',
+            compile: function (ele, attrs) {
+                var span = ele.find('span');
+                var header = ele.find('div').eq(0);
+                header.append('<div flex="15" ng-show="show">' +
+                    '<input type="button" value="slideLeft" ng-click="slideLeft()">' +
+                    '</div>');
+                header.append('<div flex="15" ng-show="show">' +
+                    '<input type="button" value="slideRight" ng-click="slideRight()">' +
+                    '</div>');
+                span.attr('ng-style','sliderStyle');
+                return{
+                    pre: function (scope, iEle, attrs) {
 
-
-//function DataTableSlider(){
-//    function link(scope,ele){
-//        var divCon = ele.find('div').eq(0).find('div');
-//        console.log(divCon);
-//    }
-//    return{
-//        restrict:'EA',
-//        link:link,
-//        scope:{}
-//    }
-//}
+                    },
+                    post: function(scope,iEle,attrs,ctrl){
+                        scope.sliderStyle = {};
+                        var L = ctrl.L - ctrl.cL;
+                        scope.show = L>0?true:false;
+                        var sliderMark = 0;
+                        scope.slideLeft = function () {
+                            if(L>=0){
+                                sliderMark-=100;
+                                this.sliderStyle = {transition:'all 1s ease',transform:'translateX('+sliderMark+'%)'}
+                                L--;
+                            }
+                        };
+                        scope.slideRight = function () {
+                            if(L<5){
+                                sliderMark+=100;
+                                this.sliderStyle = {transition:'all 1s ease',transform:'translateX('+sliderMark+'%)'};
+                                L++;
+                            }
+                        };
+                    }
+                }
+            }
+        }
+    });
